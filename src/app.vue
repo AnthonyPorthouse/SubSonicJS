@@ -142,7 +142,6 @@ export default {
       url += '&t=' + token;
       url += '&s=' + salt;
       url += '&id=' + id;
-      url += '&size=600';
 
       self.$broadcast('getAlbumArt', {
         id: id,
