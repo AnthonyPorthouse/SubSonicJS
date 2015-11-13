@@ -3,7 +3,8 @@ var Hashes = require('jshashes');
 var MD5 = new Hashes.MD5();
 var $ = require('jquery');
 
-import ArtistList from './components/ArtistList.vue';
+import ArtistList from './components/ArtistList/List.vue';
+import Artist from './components/Artist/Artist.vue';
 
 export default {
 
@@ -18,12 +19,26 @@ export default {
       },
       authenticated: false,
       artists: [],
+      artist: {},
+    }
+  },
+
+  ready: function() {
+    if (
+      this.authentication.server &&
+      this.authentication.username &&
+      this.authentication.password
+    ) {
+      this.login();
     }
   },
 
   events: {
     getArtist: function (id) {
       this.getArtist(id);
+    },
+    getAlbumArt: function (id) {
+      this.getAlbumArt(id);
     }
   },
 
@@ -73,7 +88,7 @@ export default {
       );
 
       $.ajax({
-        url: self.authentication.server + '/rest/getIndexes.view',
+        url: self.authentication.server + '/rest/getArtists.view',
         dataType: 'jsonp',
         data: {
           f: 'jsonp',
@@ -86,7 +101,7 @@ export default {
       }).done(function(data) {
         data = data['subsonic-response'];
 
-        self.artists = data.indexes.index;
+        self.artists = data.artists.index;
       });
     },
     getArtist: function(id) {
@@ -110,14 +125,35 @@ export default {
         }
       }).done(function(data) {
         data = data['subsonic-response'];
+        self.artist = data.artist;
+      });
+    },
+    getAlbumArt: function(id) {
+      var self = this;
+      var salt = Math.random().toString(36).substring(7);
+      var token = MD5.hex(
+        self.authentication.password + salt
+      );
 
-        console.log(data);
+      var url = self.authentication.server + '/rest/getCoverArt.view?';
+
+      url += 'f=json&v=1.13.0&c=subsonicjs';
+      url += '&u=' + self.authentication.username;
+      url += '&t=' + token;
+      url += '&s=' + salt;
+      url += '&id=' + id;
+      url += '&size=600';
+
+      self.$broadcast('getAlbumArt', {
+        id: id,
+        url: url
       });
     }
   },
 
   components: {
-    'artist-list': ArtistList
+    'artist-list': ArtistList,
+    'artist': Artist
   }
 };
 </script>
@@ -140,6 +176,7 @@ export default {
     </div>
 
     <div class="col-lg-10">
+      <artist :artist="artist" v-if="artist"></artist>
     </div>
   </div>
 </template>
