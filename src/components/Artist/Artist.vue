@@ -1,12 +1,18 @@
 <script>
 
-import Album from './Album.vue';
+import AlbumCover from './AlbumCover.vue';
 
 export default {
   props: ['artist'],
 
   components: {
-    album: Album
+    "album-cover": AlbumCover
+  },
+
+  methods: {
+    getAlbum: function(id) {
+      this.$dispatch('getAlbum', id);
+    }
   },
 
   computed: {
@@ -33,6 +39,6 @@ export default {
   <h1 class="display-1">{{ artist.name }}</h1>
 
   <div class="row" v-for="row in albums">
-    <album :album="album" v-for="album in row"></album>
+    <album-cover @click.prevent="getAlbum(album.id)" :album="album" v-for="album in row"></album>
   </div>
 </template>

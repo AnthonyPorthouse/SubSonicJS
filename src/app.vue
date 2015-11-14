@@ -5,6 +5,7 @@ var $ = require('jquery');
 
 import ArtistList from './components/ArtistList/List.vue';
 import Artist from './components/Artist/Artist.vue';
+import Album from './components/Album/Album.vue';
 
 export default {
 
@@ -20,6 +21,7 @@ export default {
       authenticated: false,
       artists: [],
       artist: {},
+      album: {},
     }
   },
 
@@ -36,6 +38,10 @@ export default {
   events: {
     getArtist: function (id) {
       this.getArtist(id);
+      this.album = {};
+    },
+    getAlbum: function (id) {
+      this.getAlbum(id);
     },
     getAlbumArt: function (id) {
       this.getAlbumArt(id);
@@ -128,6 +134,30 @@ export default {
         self.artist = data.artist;
       });
     },
+    getAlbum: function(id) {
+      var self = this;
+      var salt = Math.random().toString(36).substring(7);
+      var token = MD5.hex(
+        self.authentication.password + salt
+      );
+
+      $.ajax({
+        url: self.authentication.server + '/rest/getAlbum.view',
+        dataType: 'jsonp',
+        data: {
+          f: 'jsonp',
+          v: '1.13.0',
+          u: self.authentication.username,
+          t: token,
+          s: salt,
+          c: 'subsonicjs',
+          id: id
+        }
+      }).done(function(data) {
+        data = data['subsonic-response'];
+        self.album = data.album;
+      });
+    },
     getAlbumArt: function(id) {
       var self = this;
       var salt = Math.random().toString(36).substring(7);
@@ -152,7 +182,8 @@ export default {
 
   components: {
     'artist-list': ArtistList,
-    'artist': Artist
+    'artist': Artist,
+    'album': Album,
   }
 };
 </script>
@@ -175,7 +206,8 @@ export default {
     </div>
 
     <div class="col-lg-10">
-      <artist :artist="artist" v-if="artist"></artist>
+      <artist :artist="artist" v-if="artist.id"></artist>
+      <album :album="album" v-if="album.id"></album>
     </div>
   </div>
 </template>

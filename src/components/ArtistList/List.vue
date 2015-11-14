@@ -5,9 +5,21 @@ import Artist from './Artist.vue'
 export default {
   props: ['artists'],
 
+  data: function() {
+    return {
+      active: 0
+    }
+  },
+
   methods: {
     getArtist: function(id) {
       this.$dispatch('getArtist', id);
+    }
+  },
+
+  events: {
+    activeArtistChanged: function(id) {
+      this.active = id;
     }
   },
 
@@ -25,7 +37,7 @@ export default {
         {{ group.name }}
       </li>
 
-      <artist :artist="artist" v-for="artist in group.artist"></artist>
+      <artist :active="artist.id == active" :artist="artist" v-for="artist in group.artist"></artist>
     </template>
   </ul>
 </template>
