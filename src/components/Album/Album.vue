@@ -1,6 +1,12 @@
 <script>
   export default {
-    props: ['album']
+    props: ['album'],
+
+    methods: {
+      playSong: function(song) {
+        this.$dispatch('playSong', song);
+      }
+    }
   }
 </script>
 
@@ -29,7 +35,7 @@
     </thead>
 
     <tbody>
-      <tr v-for="song in album.song">
+      <tr @click.prevent="playSong(song)" data-song-id="{{ song.id }}" v-for="song in album.song">
         <td>
         </td>
         <td>

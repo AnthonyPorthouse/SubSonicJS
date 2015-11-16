@@ -25,6 +25,10 @@ export default {
       var albums = this.artist.album;
       var returned = [];
 
+      albums.sort(function (a, b) {
+        return a.year - b.year;
+      });
+
       while (albums.length > 0) {
         returned.push(albums.splice(0, 4));
       }
