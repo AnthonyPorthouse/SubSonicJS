@@ -37,6 +37,7 @@
     <tbody>
       <tr @click.prevent="playSong(song)" data-song-id="{{ song.id }}" v-for="song in album.song">
         <td>
+          {{ song.discNumber }}
         </td>
         <td>
           {{ song.track }}
