@@ -2,7 +2,7 @@
 var Hashes = require('jshashes');
 var MD5 = new Hashes.MD5();
 
-var AjaxWorker = require('shared-worker!./workers/ajaxWorker.js');
+var AjaxWorker = require('shared-worker?inline=true!./workers/ajaxWorker');
 var ajaxWorker = new AjaxWorker();
 ajaxWorker.port.start();
 

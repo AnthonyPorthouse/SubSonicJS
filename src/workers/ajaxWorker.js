@@ -34,12 +34,10 @@ onconnect = function (e) {
   var port = e.ports[0];
 
   port.onmessage = function(e) {
-    console.log(e.data);
     var url = e.data.url;
     var data = e.data.data;
 
     getJSON(url, data).then(function (data) {
-      console.log(data);
       data = JSON.parse(data);
       port.postMessage(data);
     });
