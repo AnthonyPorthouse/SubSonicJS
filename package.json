@@ -28,6 +28,7 @@
   "dependencies": {
     "jquery": "^2.1.4",
     "jshashes": "^1.0.5",
+    "shared-worker-loader": "^0.1.0",
     "vue": "^1.0.8"
   }
 }

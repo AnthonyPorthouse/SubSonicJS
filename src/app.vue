@@ -1,7 +1,10 @@
 <script>
 var Hashes = require('jshashes');
 var MD5 = new Hashes.MD5();
-var $ = require('jquery');
+
+var AjaxWorker = require('shared-worker!./workers/ajaxWorker.js');
+var ajaxWorker = new AjaxWorker();
+ajaxWorker.port.start();
 
 import ArtistList from './components/ArtistList/List.vue';
 import Artist from './components/Artist/Artist.vue';
@@ -59,19 +62,19 @@ export default {
         self.authentication.password + salt
       );
 
-      $.ajax({
+      ajaxWorker.port.postMessage({
         url: self.authentication.server + '/rest/ping.view',
-        dataType: 'jsonp',
         data: {
-          f: 'jsonp',
+          f: 'json',
           v: '1.13.0',
           u: self.authentication.username,
           t: token,
           s: salt,
           c: 'subsonicjs'
         }
-      }).done(function(data) {
-        data = data['subsonic-response'];
+      });
+      ajaxWorker.port.onmessage = function(e) {
+        var data = e.data['subsonic-response'];
 
         if (data.status !== 'ok') {
           self.authenticated = false;
@@ -83,10 +86,9 @@ export default {
           localStorage.password = self.authentication.password;
 
           self.authenticated = true;
-
           self.getArtists();
         }
-      });
+      }
     },
 
     getArtists: function(event) {
@@ -96,22 +98,22 @@ export default {
         self.authentication.password + salt
       );
 
-      $.ajax({
+      ajaxWorker.port.postMessage({
         url: self.authentication.server + '/rest/getArtists.view',
-        dataType: 'jsonp',
         data: {
-          f: 'jsonp',
+          f: 'json',
           v: '1.13.0',
           u: self.authentication.username,
           t: token,
           s: salt,
           c: 'subsonicjs'
         }
-      }).done(function(data) {
-        data = data['subsonic-response'];
-
-        self.artists = data.artists.index;
       });
+
+      ajaxWorker.port.onmessage = function(e) {
+        let data = e.data['subsonic-response'];
+        self.artists = data.artists.index;
+      }
     },
     getArtist: function(id) {
       var self = this;
@@ -120,11 +122,10 @@ export default {
         self.authentication.password + salt
       );
 
-      $.ajax({
+      ajaxWorker.port.postMessage({
         url: self.authentication.server + '/rest/getArtist.view',
-        dataType: 'jsonp',
         data: {
-          f: 'jsonp',
+          f: 'json',
           v: '1.13.0',
           u: self.authentication.username,
           t: token,
@@ -132,10 +133,12 @@ export default {
           c: 'subsonicjs',
           id: id
         }
-      }).done(function(data) {
-        data = data['subsonic-response'];
-        self.artist = data.artist;
       });
+
+      ajaxWorker.port.onmessage = function(e) {
+        let data = e.data['subsonic-response'];
+        self.artist = data.artist;
+      }
     },
     getAlbum: function(id) {
       var self = this;
@@ -144,11 +147,10 @@ export default {
         self.authentication.password + salt
       );
 
-      $.ajax({
+      ajaxWorker.port.postMessage({
         url: self.authentication.server + '/rest/getAlbum.view',
-        dataType: 'jsonp',
         data: {
-          f: 'jsonp',
+          f: 'json',
           v: '1.13.0',
           u: self.authentication.username,
           t: token,
@@ -156,10 +158,12 @@ export default {
           c: 'subsonicjs',
           id: id
         }
-      }).done(function(data) {
-        data = data['subsonic-response'];
-        self.album = data.album;
       });
+
+      ajaxWorker.port.onmessage = function(e) {
+        let data = e.data['subsonic-response'];
+        self.album = data.album;
+      }
     },
     getAlbumArt: function(id) {
       var self = this;
