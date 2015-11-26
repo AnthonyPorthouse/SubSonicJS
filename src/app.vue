@@ -216,24 +216,33 @@ export default {
 </script>
 
 <template>
-  <nav class="navbar navbar-fixed-top navbar-dark bg-inverse">
-    <a href="#" class="navbar-brand">SubSonicJS</a>
+  <nav class="top-bar">
 
-    <form class="form-inline navbar-form pull-right">
-      <input class="form-control" type="text" name="server" id="server" v-model="authentication.server">
-      <input class="form-control" type="text" name="username" id="username" v-model="authentication.username">
-      <input class="form-control" type="password" name="password" id="password" v-model="authentication.password">
-      <button class="btn btn-success-outline" id="login" v-on:click.prevent="login">Login</button>
-    </form>
+    <div class="top-bar-left">
+      <ul class="menu">
+        <li class="menu-text">SubSonicJS</li>
+      </ul>
+    </div>
+
+    <div class="top-bar-right">
+      <form>
+        <ul class="menu">
+          <li><input placeholder="Server URL" type="text" name="server" id="server" v-model="authentication.server"></li>
+          <li><input placeholder="Username" type="text" name="username" id="username" v-model="authentication.username"></li>
+          <li><input placeholder="Password" type="password" name="password" id="password" v-model="authentication.password"></li>
+          <li><button class="button" id="login" v-on:click.prevent="login">Login</button></li>
+        </ul>
+      </form>
+    </div>
   </nav>
 
-  <div class="container-fluid" v-if="authenticated">
+  <div v-if="authenticated">
     <div class="row">
-      <div class="col-lg-2">
+      <div class="medium-2 columns">
         <artist-list :artists="artists"></artist-list>
       </div>
 
-      <div class="col-lg-10">
+      <div class="medium-10 columns">
         <artist :artist="artist" v-if="artist.id"></artist>
         <album :album="album" v-if="album.id"></album>
       </div>

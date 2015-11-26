@@ -40,9 +40,9 @@ export default {
 </script>
 
 <template>
-  <h1 class="display-1">{{ artist.name }}</h1>
+  <h1>{{ artist.name }}</h1>
 
-  <div class="row" v-for="row in albums">
-    <album-cover @click.prevent="getAlbum(album.id)" :album="album" v-for="album in row"></album>
+  <div class="row small-up-1 medium-up-2 large-up-4">
+    <album-cover @click.prevent="getAlbum(album.id)" :album="album" v-for="album in artist.album"></album>
   </div>
 </template>

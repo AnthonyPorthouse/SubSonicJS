@@ -40,9 +40,9 @@ export default {
 </style>
 
 <template>
-  <div class="col-md-3">
+  <div class="column">
     <div class="card">
-      <img v-if="albumArt.url" class="card-img-top album-art" v-bind:src="albumArt.url" alt="{{ album.name }}" />
+      <img v-if="albumArt.url" class="thumbnail album-art" v-bind:src="albumArt.url" alt="{{ album.name }}" />
       <div class="card-block">
         <h4 class="card-title">{{ album.name }}</h4>
         <p class="card-text">{{ album.year }}</p>

@@ -11,9 +11,9 @@
 </script>
 
 <template>
-  <h2 class="display-4">{{ album.name }}</h2>
+  <h2>{{ album.name }}</h2>
 
-  <table class="table table-striped">
+  <table>
     <thead>
       <tr>
         <th>

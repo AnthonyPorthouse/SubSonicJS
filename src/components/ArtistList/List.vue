@@ -30,11 +30,11 @@ export default {
 </script>
 
 <template>
-  <ul class="list-group" id="artist-list">
+  <ul class="menu vertical" id="artist-list">
 
     <template v-for="(index, group) in artists">
-      <li class="list-group-item">
-        {{ group.name }}
+      <li class="header">
+        <a href="#">{{ group.name }}</a>
       </li>
 
       <artist :active="artist.id == active" :artist="artist" v-for="artist in group.artist"></artist>
