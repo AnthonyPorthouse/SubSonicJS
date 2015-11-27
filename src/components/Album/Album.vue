@@ -1,10 +1,17 @@
 <script>
+  var moment = require('moment');
+  require("moment-duration-format");
+
   export default {
     props: ['album'],
 
     methods: {
       playSong: function(song) {
         this.$dispatch('playSong', song);
+      },
+      getTime: function(song) {
+        let time = moment.duration(song.duration, 'seconds');
+        return time.format('h:m:ss');
       }
     }
   }
@@ -17,7 +24,9 @@
 </style>
 
 <template>
+  <h1>{{ album.artist }}</h1>
   <h2>{{ album.name }}</h2>
+  <h3>{{ album.year }}</h3>
 
   <table class="tracklist">
     <thead>
@@ -54,8 +63,8 @@
         <td>
           {{ song.artist }}
         </td>
-        <td>
-          {{ Math.floor(song.duration / 60) }}:{{ ("0" + (song.duration % 60)).slice(-2) }}
+        <td class="text-right">
+          {{ getTime(song) }}
         </td>
       </tr>
     </tbody>
