@@ -6,6 +6,7 @@ export default {
     getArtist: function(id) {
       this.$dispatch('getArtist', id);
       this.$dispatch('activeArtistChanged', this.artist.id);
+      this.$dispatch('setState', 'artist')
     },
   }
 };

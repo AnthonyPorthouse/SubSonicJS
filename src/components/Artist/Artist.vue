@@ -12,6 +12,7 @@ export default {
   methods: {
     getAlbum: function(id) {
       this.$dispatch('getAlbum', id);
+      this.$dispatch('setState', 'album');
     }
   },
 

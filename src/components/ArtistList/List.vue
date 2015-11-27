@@ -29,6 +29,12 @@ export default {
 };
 </script>
 
+<style>
+  #artist-list li.header {
+    text-align: center;
+  }
+</style>
+
 <template>
   <ul class="menu vertical" id="artist-list">
 

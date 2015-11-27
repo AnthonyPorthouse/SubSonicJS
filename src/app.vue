@@ -25,6 +25,7 @@ export default {
       artists: [],
       artist: {},
       album: {},
+      state: undefined,
     }
   },
 
@@ -39,6 +40,9 @@ export default {
   },
 
   events: {
+    setState: function (state) {
+      this.state = state;
+    },
     getArtist: function (id) {
       this.getArtist(id);
       this.album = {};
@@ -243,8 +247,8 @@ export default {
       </div>
 
       <div class="medium-10 columns">
-        <artist :artist="artist" v-if="artist.id"></artist>
-        <album :album="album" v-if="album.id"></album>
+        <artist :artist="artist" v-if="state == 'artist'"></artist>
+        <album :album="album" v-if="state == 'album'"></album>
       </div>
     </div>
 

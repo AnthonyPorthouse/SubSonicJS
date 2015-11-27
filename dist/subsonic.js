@@ -10647,7 +10647,7 @@
 	module.exports = __webpack_require__(80)
 	
 	if (module.exports.__esModule) module.exports = module.exports.default
-	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(101)
+	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(103)
 	if (false) {
 	(function () {
 	var hotAPI = require("vue-hot-reload-api")
@@ -11028,20 +11028,20 @@
 	
 	var _List2 = _interopRequireDefault(_List);
 	
-	var _Artist = __webpack_require__(87);
+	var _Artist = __webpack_require__(89);
 	
 	var _Artist2 = _interopRequireDefault(_Artist);
 	
-	var _Album = __webpack_require__(95);
+	var _Album = __webpack_require__(97);
 	
 	var _Album2 = _interopRequireDefault(_Album);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var Hashes = __webpack_require__(98);
+	var Hashes = __webpack_require__(100);
 	var MD5 = new Hashes.MD5();
 	
-	var AjaxWorker = __webpack_require__(99);
+	var AjaxWorker = __webpack_require__(101);
 	var ajaxWorker = new AjaxWorker();
 	ajaxWorker.port.start();
 	
@@ -11059,7 +11059,8 @@
 	      authenticated: false,
 	      artists: [],
 	      artist: {},
-	      album: {}
+	      album: {},
+	      state: undefined
 	    };
 	  },
 	
@@ -11070,6 +11071,9 @@
 	  },
 	
 	  events: {
+	    setState: function setState(state) {
+	      this.state = state;
+	    },
 	    getArtist: function getArtist(id) {
 	      this.getArtist(id);
 	      this.album = {};
@@ -11237,10 +11241,11 @@
 /* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(82)
+	__webpack_require__(82)
+	module.exports = __webpack_require__(84)
 	
 	if (module.exports.__esModule) module.exports = module.exports.default
-	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(86)
+	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(88)
 	if (false) {
 	(function () {
 	var hotAPI = require("vue-hot-reload-api")
@@ -11261,13 +11266,53 @@
 /* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(83);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(79)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./List.vue", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./List.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 83 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(78)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "#artist-list li.header {\n    text-align: center;\n  }", ""]);
+	
+	// exports
+
+
+/***/ },
+/* 84 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 	
-	var _Artist = __webpack_require__(83);
+	var _Artist = __webpack_require__(85);
 	
 	var _Artist2 = _interopRequireDefault(_Artist);
 	
@@ -11300,13 +11345,13 @@
 	};
 
 /***/ },
-/* 83 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(84)
+	module.exports = __webpack_require__(86)
 	
 	if (module.exports.__esModule) module.exports = module.exports.default
-	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(85)
+	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(87)
 	if (false) {
 	(function () {
 	var hotAPI = require("vue-hot-reload-api")
@@ -11324,7 +11369,7 @@
 	}
 
 /***/ },
-/* 84 */
+/* 86 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -11339,30 +11384,31 @@
 	    getArtist: function getArtist(id) {
 	      this.$dispatch('getArtist', id);
 	      this.$dispatch('activeArtistChanged', this.artist.id);
+	      this.$dispatch('setState', 'artist');
 	    }
 	  }
 	};
 
 /***/ },
-/* 85 */
-/***/ function(module, exports) {
-
-	module.exports = "<a href=\"#\"\n    data-artist-id=\"{{ artist.id }}\"\n    class=\"list-group-item\"\n    v-bind:class=\"{ 'active': this.active }\"\n    @click.prevent=\"getArtist(artist.id)\">\n    {{ artist.name }}\n  </a>";
-
-/***/ },
-/* 86 */
-/***/ function(module, exports) {
-
-	module.exports = "<ul class=\"list-group\" id=\"artist-list\">\n\n    <template v-for=\"(index, group) in artists\">\n      <li class=\"list-group-item\">\n        {{ group.name }}\n      </li>\n\n      <artist :active=\"artist.id == active\" :artist=\"artist\" v-for=\"artist in group.artist\"></artist>\n    </template>\n  </ul>";
-
-/***/ },
 /* 87 */
+/***/ function(module, exports) {
+
+	module.exports = "<li>\n    <a href=\"#\"\n      data-artist-id=\"{{ artist.id }}\"\n      class=\"list-group-item\"\n      v-bind:class=\"{ 'active': this.active }\"\n      @click.prevent=\"getArtist(artist.id)\">\n      {{ artist.name }}\n    </a>\n  </li>";
+
+/***/ },
+/* 88 */
+/***/ function(module, exports) {
+
+	module.exports = "<ul class=\"menu vertical\" id=\"artist-list\">\n\n    <template v-for=\"(index, group) in artists\">\n      <li class=\"header\">\n        <a href=\"#\">{{ group.name }}</a>\n      </li>\n\n      <artist :active=\"artist.id == active\" :artist=\"artist\" v-for=\"artist in group.artist\"></artist>\n    </template>\n  </ul>";
+
+/***/ },
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(88)
+	module.exports = __webpack_require__(90)
 	
 	if (module.exports.__esModule) module.exports = module.exports.default
-	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(94)
+	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(96)
 	if (false) {
 	(function () {
 	var hotAPI = require("vue-hot-reload-api")
@@ -11380,7 +11426,7 @@
 	}
 
 /***/ },
-/* 88 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11389,7 +11435,7 @@
 	  value: true
 	});
 	
-	var _AlbumCover = __webpack_require__(89);
+	var _AlbumCover = __webpack_require__(91);
 	
 	var _AlbumCover2 = _interopRequireDefault(_AlbumCover);
 	
@@ -11405,6 +11451,7 @@
 	  methods: {
 	    getAlbum: function getAlbum(id) {
 	      this.$dispatch('getAlbum', id);
+	      this.$dispatch('setState', 'album');
 	    }
 	  },
 	
@@ -11432,14 +11479,14 @@
 	};
 
 /***/ },
-/* 89 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(90)
-	module.exports = __webpack_require__(92)
+	__webpack_require__(92)
+	module.exports = __webpack_require__(94)
 	
 	if (module.exports.__esModule) module.exports = module.exports.default
-	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(93)
+	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(95)
 	if (false) {
 	(function () {
 	var hotAPI = require("vue-hot-reload-api")
@@ -11457,13 +11504,13 @@
 	}
 
 /***/ },
-/* 90 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(91);
+	var content = __webpack_require__(93);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(79)(content, {});
@@ -11483,7 +11530,7 @@
 	}
 
 /***/ },
-/* 91 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(78)();
@@ -11497,7 +11544,7 @@
 
 
 /***/ },
-/* 92 */
+/* 94 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -11538,25 +11585,25 @@
 	};
 
 /***/ },
-/* 93 */
-/***/ function(module, exports) {
-
-	module.exports = "<div class=\"col-md-3\">\n    <div class=\"card\">\n      <img v-if=\"albumArt.url\" class=\"card-img-top album-art\" v-bind:src=\"albumArt.url\" alt=\"{{ album.name }}\" />\n      <div class=\"card-block\">\n        <h4 class=\"card-title\">{{ album.name }}</h4>\n        <p class=\"card-text\">{{ album.year }}</p>\n      </div>\n    </div>\n  </div>";
-
-/***/ },
-/* 94 */
-/***/ function(module, exports) {
-
-	module.exports = "<h1 class=\"display-1\">{{ artist.name }}</h1>\n\n  <div class=\"row\" v-for=\"row in albums\">\n    <album-cover @click.prevent=\"getAlbum(album.id)\" :album=\"album\" v-for=\"album in row\"></album>\n  </div>";
-
-/***/ },
 /* 95 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"column\">\n    <div class=\"card\">\n      <img v-if=\"albumArt.url\" class=\"thumbnail album-art\" v-bind:src=\"albumArt.url\" alt=\"{{ album.name }}\" />\n      <div class=\"card-block\">\n        <h4 class=\"card-title\">{{ album.name }}</h4>\n        <p class=\"card-text\">{{ album.year }}</p>\n      </div>\n    </div>\n  </div>";
+
+/***/ },
+/* 96 */
+/***/ function(module, exports) {
+
+	module.exports = "<h1>{{ artist.name }}</h1>\n\n  <div class=\"row small-up-1 medium-up-2 large-up-4\">\n    <album-cover @click.prevent=\"getAlbum(album.id)\" :album=\"album\" v-for=\"album in artist.album\"></album>\n  </div>";
+
+/***/ },
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(96)
+	module.exports = __webpack_require__(98)
 	
 	if (module.exports.__esModule) module.exports = module.exports.default
-	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(97)
+	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(99)
 	if (false) {
 	(function () {
 	var hotAPI = require("vue-hot-reload-api")
@@ -11574,7 +11621,7 @@
 	}
 
 /***/ },
-/* 96 */
+/* 98 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -11593,13 +11640,13 @@
 	};
 
 /***/ },
-/* 97 */
+/* 99 */
 /***/ function(module, exports) {
 
-	module.exports = "<h2 class=\"display-4\">{{ album.name }}</h2>\n\n  <table class=\"table table-striped\">\n    <thead>\n      <tr>\n        <th>\n          Disc Number\n        </th>\n        <th>\n          Track Number\n        </th>\n        <th>\n          Track Name\n        </th>\n        <th>\n          Artist Name\n        </th>\n        <th>\n          Duration\n        </th>\n      </tr>\n    </thead>\n\n    <tbody>\n      <tr @click.prevent=\"playSong(song)\" data-song-id=\"{{ song.id }}\" v-for=\"song in album.song\">\n        <td>\n          {{ song.discNumber }}\n        </td>\n        <td>\n          {{ song.track }}\n        </td>\n        <td>\n          {{ song.title }}\n        </td>\n        <td>\n          {{ song.artist }}\n        </td>\n        <td>\n          {{ Math.floor(song.duration / 60) }}:{{ song.duration % 60 }}\n        </td>\n      </tr>\n    </tbody>\n  </table>";
+	module.exports = "<h2>{{ album.name }}</h2>\n\n  <table>\n    <thead>\n      <tr>\n        <th>\n          Disc Number\n        </th>\n        <th>\n          Track Number\n        </th>\n        <th>\n          Track Name\n        </th>\n        <th>\n          Artist Name\n        </th>\n        <th>\n          Duration\n        </th>\n      </tr>\n    </thead>\n\n    <tbody>\n      <tr @click.prevent=\"playSong(song)\" data-song-id=\"{{ song.id }}\" v-for=\"song in album.song\">\n        <td>\n          {{ song.discNumber }}\n        </td>\n        <td>\n          {{ song.track }}\n        </td>\n        <td>\n          {{ song.title }}\n        </td>\n        <td>\n          {{ song.artist }}\n        </td>\n        <td>\n          {{ Math.floor(song.duration / 60) }}:{{ song.duration % 60 }}\n        </td>\n      </tr>\n    </tbody>\n  </table>";
 
 /***/ },
-/* 98 */
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -13371,15 +13418,15 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 99 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function() {
-		return __webpack_require__(100)("/******/ (function(modules) { // webpackBootstrap\n/******/ \t// The module cache\n/******/ \tvar installedModules = {};\n/******/\n/******/ \t// The require function\n/******/ \tfunction __webpack_require__(moduleId) {\n/******/\n/******/ \t\t// Check if module is in cache\n/******/ \t\tif(installedModules[moduleId])\n/******/ \t\t\treturn installedModules[moduleId].exports;\n/******/\n/******/ \t\t// Create a new module (and put it into the cache)\n/******/ \t\tvar module = installedModules[moduleId] = {\n/******/ \t\t\texports: {},\n/******/ \t\t\tid: moduleId,\n/******/ \t\t\tloaded: false\n/******/ \t\t};\n/******/\n/******/ \t\t// Execute the module function\n/******/ \t\tmodules[moduleId].call(module.exports, module, module.exports, __webpack_require__);\n/******/\n/******/ \t\t// Flag the module as loaded\n/******/ \t\tmodule.loaded = true;\n/******/\n/******/ \t\t// Return the exports of the module\n/******/ \t\treturn module.exports;\n/******/ \t}\n/******/\n/******/\n/******/ \t// expose the modules object (__webpack_modules__)\n/******/ \t__webpack_require__.m = modules;\n/******/\n/******/ \t// expose the module cache\n/******/ \t__webpack_require__.c = installedModules;\n/******/\n/******/ \t// __webpack_public_path__\n/******/ \t__webpack_require__.p = \"dist/\";\n/******/\n/******/ \t// Load entry module and return exports\n/******/ \treturn __webpack_require__(0);\n/******/ })\n/************************************************************************/\n/******/ ([\n/* 0 */\n/***/ function(module, exports) {\n\n\tfunction getJSON(url, data) {\n\t  return new Promise(function(resolve, reject) {\n\t    var req = new XMLHttpRequest();\n\t\n\t    var query = [];\n\t    for (var key in data) {\n\t      if (!data.hasOwnProperty(key)) {\n\t        continue;\n\t      }\n\t\n\t      query.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));\n\t    }\n\t    url = url + '?' + query.join('&');\n\t\n\t    req.open('GET', url);\n\t\n\t    req.onload = function() {\n\t      if (req.status == 200) {\n\t        resolve(req.response);\n\t      } else {\n\t        reject(Error(req.statusText));\n\t      }\n\t    };\n\t\n\t    req.onerror = function() {\n\t      reject(Error('Network Error'));\n\t    };\n\t\n\t    req.send();\n\t  });\n\t}\n\t\n\tonconnect = function (e) {\n\t  var port = e.ports[0];\n\t\n\t  port.onmessage = function(e) {\n\t    var url = e.data.url;\n\t    var data = e.data.data;\n\t\n\t    getJSON(url, data).then(function (data) {\n\t      data = JSON.parse(data);\n\t      port.postMessage(data);\n\t    });\n\t  }\n\t\n\t  port.start();\n\t}\n\n\n/***/ }\n/******/ ]);\n//# sourceMappingURL=dfb0c1430a1196e84d49.sharedworker.js.map", __webpack_require__.p + "dfb0c1430a1196e84d49.sharedworker.js");
+		return __webpack_require__(102)("/******/ (function(modules) { // webpackBootstrap\n/******/ \t// The module cache\n/******/ \tvar installedModules = {};\n/******/\n/******/ \t// The require function\n/******/ \tfunction __webpack_require__(moduleId) {\n/******/\n/******/ \t\t// Check if module is in cache\n/******/ \t\tif(installedModules[moduleId])\n/******/ \t\t\treturn installedModules[moduleId].exports;\n/******/\n/******/ \t\t// Create a new module (and put it into the cache)\n/******/ \t\tvar module = installedModules[moduleId] = {\n/******/ \t\t\texports: {},\n/******/ \t\t\tid: moduleId,\n/******/ \t\t\tloaded: false\n/******/ \t\t};\n/******/\n/******/ \t\t// Execute the module function\n/******/ \t\tmodules[moduleId].call(module.exports, module, module.exports, __webpack_require__);\n/******/\n/******/ \t\t// Flag the module as loaded\n/******/ \t\tmodule.loaded = true;\n/******/\n/******/ \t\t// Return the exports of the module\n/******/ \t\treturn module.exports;\n/******/ \t}\n/******/\n/******/\n/******/ \t// expose the modules object (__webpack_modules__)\n/******/ \t__webpack_require__.m = modules;\n/******/\n/******/ \t// expose the module cache\n/******/ \t__webpack_require__.c = installedModules;\n/******/\n/******/ \t// __webpack_public_path__\n/******/ \t__webpack_require__.p = \"dist/\";\n/******/\n/******/ \t// Load entry module and return exports\n/******/ \treturn __webpack_require__(0);\n/******/ })\n/************************************************************************/\n/******/ ([\n/* 0 */\n/***/ function(module, exports) {\n\n\tfunction getJSON(url, data) {\n\t  return new Promise(function(resolve, reject) {\n\t    var req = new XMLHttpRequest();\n\t\n\t    var query = [];\n\t    for (var key in data) {\n\t      if (!data.hasOwnProperty(key)) {\n\t        continue;\n\t      }\n\t\n\t      query.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));\n\t    }\n\t    url = url + '?' + query.join('&');\n\t\n\t    req.open('GET', url);\n\t\n\t    req.onload = function() {\n\t      if (req.status == 200) {\n\t        resolve(req.response);\n\t      } else {\n\t        reject(Error(req.statusText));\n\t      }\n\t    };\n\t\n\t    req.onerror = function() {\n\t      reject(Error('Network Error'));\n\t    };\n\t\n\t    req.send();\n\t  });\n\t}\n\t\n\tonconnect = function (e) {\n\t  var port = e.ports[0];\n\t\n\t  port.onmessage = function(e) {\n\t    var url = e.data.url;\n\t    var data = e.data.data;\n\t\n\t    getJSON(url, data).then(function (data) {\n\t      data = JSON.parse(data);\n\t      port.postMessage(data);\n\t    });\n\t  }\n\t\n\t  port.start();\n\t}\n\n\n/***/ }\n/******/ ]);\n//# sourceMappingURL=dfb0c1430a1196e84d49.sharedworker.js.map", __webpack_require__.p + "dfb0c1430a1196e84d49.sharedworker.js");
 	};
 
 /***/ },
-/* 100 */
+/* 102 */
 /***/ function(module, exports) {
 
 	// http://stackoverflow.com/questions/10343913/how-to-create-a-web-worker-from-a-string
@@ -13408,10 +13455,10 @@
 
 
 /***/ },
-/* 101 */
+/* 103 */
 /***/ function(module, exports) {
 
-	module.exports = "<nav class=\"navbar navbar-fixed-top navbar-dark bg-inverse\">\n    <a href=\"#\" class=\"navbar-brand\">SubSonicJS</a>\n\n    <form class=\"form-inline navbar-form pull-right\">\n      <input class=\"form-control\" type=\"text\" name=\"server\" id=\"server\" v-model=\"authentication.server\">\n      <input class=\"form-control\" type=\"text\" name=\"username\" id=\"username\" v-model=\"authentication.username\">\n      <input class=\"form-control\" type=\"password\" name=\"password\" id=\"password\" v-model=\"authentication.password\">\n      <button class=\"btn btn-success-outline\" id=\"login\" v-on:click.prevent=\"login\">Login</button>\n    </form>\n  </nav>\n\n  <div class=\"container-fluid\" v-if=\"authenticated\">\n    <div class=\"row\">\n      <div class=\"col-lg-2\">\n        <artist-list :artists=\"artists\"></artist-list>\n      </div>\n\n      <div class=\"col-lg-10\">\n        <artist :artist=\"artist\" v-if=\"artist.id\"></artist>\n        <album :album=\"album\" v-if=\"album.id\"></album>\n      </div>\n    </div>\n\n    <nav id=\"now-playing-bar\" class=\"navbar navbar-fixed-bottom navbar-light bg-faded\">\n      <audio id=\"player\"></audio>\n    </nav>\n  </div>";
+	module.exports = "<nav class=\"top-bar\">\n\n    <div class=\"top-bar-left\">\n      <ul class=\"menu\">\n        <li class=\"menu-text\">SubSonicJS</li>\n      </ul>\n    </div>\n\n    <div class=\"top-bar-right\">\n      <form>\n        <ul class=\"menu\">\n          <li><input placeholder=\"Server URL\" type=\"text\" name=\"server\" id=\"server\" v-model=\"authentication.server\"></li>\n          <li><input placeholder=\"Username\" type=\"text\" name=\"username\" id=\"username\" v-model=\"authentication.username\"></li>\n          <li><input placeholder=\"Password\" type=\"password\" name=\"password\" id=\"password\" v-model=\"authentication.password\"></li>\n          <li><button class=\"button\" id=\"login\" v-on:click.prevent=\"login\">Login</button></li>\n        </ul>\n      </form>\n    </div>\n  </nav>\n\n  <div v-if=\"authenticated\">\n    <div class=\"row\">\n      <div class=\"medium-2 columns\">\n        <artist-list :artists=\"artists\"></artist-list>\n      </div>\n\n      <div class=\"medium-10 columns\">\n        <artist :artist=\"artist\" v-if=\"state == 'artist'\"></artist>\n        <album :album=\"album\" v-if=\"state == 'album'\"></album>\n      </div>\n    </div>\n\n    <nav id=\"now-playing-bar\" class=\"navbar navbar-fixed-bottom navbar-light bg-faded\">\n      <audio id=\"player\"></audio>\n    </nav>\n  </div>";
 
 /***/ }
 /******/ ]);
