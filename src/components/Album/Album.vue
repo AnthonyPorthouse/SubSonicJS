@@ -10,10 +10,16 @@
   }
 </script>
 
+<style>
+  .tracklist {
+    width: 100%;
+  }
+</style>
+
 <template>
   <h2>{{ album.name }}</h2>
 
-  <table>
+  <table class="tracklist">
     <thead>
       <tr>
         <th>
@@ -36,10 +42,10 @@
 
     <tbody>
       <tr @click.prevent="playSong(song)" data-song-id="{{ song.id }}" v-for="song in album.song">
-        <td>
+        <td class="text-right">
           {{ song.discNumber }}
         </td>
-        <td>
+        <td class="text-right">
           {{ song.track }}
         </td>
         <td>
@@ -49,7 +55,7 @@
           {{ song.artist }}
         </td>
         <td>
-          {{ Math.floor(song.duration / 60) }}:{{ song.duration % 60 }}
+          {{ Math.floor(song.duration / 60) }}:{{ ("0" + (song.duration % 60)).slice(-2) }}
         </td>
       </tr>
     </tbody>
