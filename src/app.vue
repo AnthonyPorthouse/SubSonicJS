@@ -206,6 +206,19 @@ export default {
       url += '&format=mp3';
 
       var player = document.getElementById('player');
+      var progress = document.getElementById('now-playing-progress');
+
+      var duration = song.duration;
+      if (!!duration) {
+        progress.max = duration;
+      }
+
+      player.addEventListener('playing', function (e) {
+        var playProgress = setInterval(function () {
+          progress.value = Math.floor(e.target.currentTime);
+        }, 50);
+      });
+
       player.src = url;
       player.play();
     },
@@ -254,6 +267,8 @@ export default {
 
     <nav id="now-playing-bar" class="navbar navbar-fixed-bottom navbar-light bg-faded">
       <audio id="player"></audio>
+
+      <progress style="width: 100%" id="now-playing-progress" value="0" max="100"></progress>
     </nav>
   </div>
 </template>
@@ -262,5 +277,20 @@ export default {
   body > .container-fluid {
     padding-top: 3.5rem;
     padding-bottom: 3.5rem;
+  }
+
+  body { margin-bottom: 24px; }
+
+  nav#now-playing-bar {
+    position: fixed !important;
+    bottom: 0;
+    height: 24px;
+    width: 100%;
+
+    background: #eee;
+  }
+
+  progress[value] {
+    transition-duration: 1s;
   }
 </style>
