@@ -208,15 +208,55 @@ export default {
       var player = document.getElementById('player');
       var progress = document.getElementById('now-playing-progress');
 
+      var playButton = document.getElementById('play');
+      var pauseButton = document.getElementById('pause');
+      var stopButton = document.getElementById('stop');
+
+      playButton.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        player.play();
+      });
+
+      pauseButton.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        player.pause();
+      });
+
       var duration = song.duration;
       if (!!duration) {
         progress.max = duration;
       }
 
+      var playProgress;
       player.addEventListener('playing', function (e) {
-        var playProgress = setInterval(function () {
+        playButton.style.visibility = 'hidden';
+        playButton.style.display = 'none';
+        pauseButton.style.visibility = 'visible';
+        pauseButton.style.display = 'inline';
+
+        playProgress = setInterval(function () {
           progress.value = Math.floor(e.target.currentTime);
         }, 50);
+      });
+
+      player.addEventListener('ended', function () {
+        clearInterval(playProgress);
+
+        playButton.style.visibility = 'visible';
+        playButton.style.display = 'inline'
+        pauseButton.style.visibility = 'hidden';
+        pauseButton.style.display = 'none';
+      })
+
+      player.addEventListener('pause', function () {
+        clearInterval(playProgress);
+
+        playButton.style.visibility = 'visible';
+        playButton.style.display = 'inline'
+        pauseButton.style.visibility = 'hidden';
+        pauseButton.style.display = 'none';
       });
 
       player.src = url;
@@ -268,7 +308,18 @@ export default {
     <nav id="now-playing-bar" class="navbar navbar-fixed-bottom navbar-light bg-faded">
       <audio id="player"></audio>
 
-      <progress style="width: 100%" id="now-playing-progress" value="0" max="100"></progress>
+      <div class="now-playing-wrapper">
+        <div class="now-playing-controls-container">
+          <a id="play" href="#"><span class="fa fa-fw fa-play"></span></a>
+          <a id="pause" style="display: none" href="#"><span class="fa fa-fw fa-pause"></span></a>
+          <a id="stop" href="#"><span class="fa fa-fw fa-stop"></span></a>
+        </div>
+
+        <div class="now-playing-bar-container">
+          <progress style="width: 100%" id="now-playing-progress" value="0" max="100"></progress>
+        </div>
+      </div>
+
     </nav>
   </div>
 </template>
@@ -290,7 +341,13 @@ export default {
     background: #eee;
   }
 
-  progress[value] {
-    transition-duration: 1s;
+  .now-playing-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .now-playing-bar-container {
+    flex-grow: 100;
   }
 </style>

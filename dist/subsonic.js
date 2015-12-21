@@ -10699,7 +10699,7 @@
 	
 	
 	// module
-	exports.push([module.id, "body > .container-fluid {\n    padding-top: 3.5rem;\n    padding-bottom: 3.5rem;\n  }", ""]);
+	exports.push([module.id, "body > .container-fluid {\n    padding-top: 3.5rem;\n    padding-bottom: 3.5rem;\n  }\n\n  body { margin-bottom: 24px; }\n\n  nav#now-playing-bar {\n    position: fixed !important;\n    bottom: 0;\n    height: 24px;\n    width: 100%;\n\n    background: #eee;\n  }\n\n  .now-playing-wrapper {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -webkit-box-pack: start;\n    -webkit-justify-content: flex-start;\n        -ms-flex-pack: start;\n            justify-content: flex-start;\n  }\n\n  .now-playing-bar-container {\n    -webkit-box-flex: 100;\n    -webkit-flex-grow: 100;\n        -ms-flex-positive: 100;\n            flex-grow: 100;\n  }", ""]);
 	
 	// exports
 
@@ -11225,6 +11225,59 @@
 	      url += '&format=mp3';
 	
 	      var player = document.getElementById('player');
+	      var progress = document.getElementById('now-playing-progress');
+	
+	      var playButton = document.getElementById('play');
+	      var pauseButton = document.getElementById('pause');
+	      var stopButton = document.getElementById('stop');
+	
+	      playButton.addEventListener('click', function (e) {
+	        e.preventDefault();
+	
+	        player.play();
+	      });
+	
+	      pauseButton.addEventListener('click', function (e) {
+	        e.preventDefault();
+	
+	        player.pause();
+	      });
+	
+	      var duration = song.duration;
+	      if (!!duration) {
+	        progress.max = duration;
+	      }
+	
+	      var playProgress;
+	      player.addEventListener('playing', function (e) {
+	        playButton.style.visibility = 'hidden';
+	        playButton.style.display = 'none';
+	        pauseButton.style.visibility = 'visible';
+	        pauseButton.style.display = 'inline';
+	
+	        playProgress = setInterval(function () {
+	          progress.value = Math.floor(e.target.currentTime);
+	        }, 50);
+	      });
+	
+	      player.addEventListener('ended', function () {
+	        clearInterval(playProgress);
+	
+	        playButton.style.visibility = 'visible';
+	        playButton.style.display = 'inline';
+	        pauseButton.style.visibility = 'hidden';
+	        pauseButton.style.display = 'none';
+	      });
+	
+	      player.addEventListener('pause', function () {
+	        clearInterval(playProgress);
+	
+	        playButton.style.visibility = 'visible';
+	        playButton.style.display = 'inline';
+	        pauseButton.style.visibility = 'hidden';
+	        pauseButton.style.display = 'none';
+	      });
+	
 	      player.src = url;
 	      player.play();
 	    }
@@ -25454,7 +25507,7 @@
 /* 194 */
 /***/ function(module, exports) {
 
-	module.exports = "<nav class=\"top-bar\">\n\n    <div class=\"top-bar-left\">\n      <ul class=\"menu\">\n        <li class=\"menu-text\">SubSonicJS</li>\n      </ul>\n    </div>\n\n    <div class=\"top-bar-right\">\n      <form>\n        <ul class=\"menu\">\n          <li><input placeholder=\"Server URL\" type=\"text\" name=\"server\" id=\"server\" v-model=\"authentication.server\"></li>\n          <li><input placeholder=\"Username\" type=\"text\" name=\"username\" id=\"username\" v-model=\"authentication.username\"></li>\n          <li><input placeholder=\"Password\" type=\"password\" name=\"password\" id=\"password\" v-model=\"authentication.password\"></li>\n          <li><button class=\"button\" id=\"login\" v-on:click.prevent=\"login\">Login</button></li>\n        </ul>\n      </form>\n    </div>\n  </nav>\n\n  <div v-if=\"authenticated\">\n    <div class=\"row\">\n      <div class=\"medium-2 columns\">\n        <artist-list :artists=\"artists\"></artist-list>\n      </div>\n\n      <div class=\"medium-10 columns\">\n        <artist :artist=\"artist\" v-if=\"state == 'artist'\"></artist>\n        <album :album=\"album\" v-if=\"state == 'album'\"></album>\n      </div>\n    </div>\n\n    <nav id=\"now-playing-bar\" class=\"navbar navbar-fixed-bottom navbar-light bg-faded\">\n      <audio id=\"player\"></audio>\n    </nav>\n  </div>";
+	module.exports = "<nav class=\"top-bar\">\n\n    <div class=\"top-bar-left\">\n      <ul class=\"menu\">\n        <li class=\"menu-text\">SubSonicJS</li>\n      </ul>\n    </div>\n\n    <div class=\"top-bar-right\">\n      <form>\n        <ul class=\"menu\">\n          <li><input placeholder=\"Server URL\" type=\"text\" name=\"server\" id=\"server\" v-model=\"authentication.server\"></li>\n          <li><input placeholder=\"Username\" type=\"text\" name=\"username\" id=\"username\" v-model=\"authentication.username\"></li>\n          <li><input placeholder=\"Password\" type=\"password\" name=\"password\" id=\"password\" v-model=\"authentication.password\"></li>\n          <li><button class=\"button\" id=\"login\" v-on:click.prevent=\"login\">Login</button></li>\n        </ul>\n      </form>\n    </div>\n  </nav>\n\n  <div v-if=\"authenticated\">\n    <div class=\"row\">\n      <div class=\"medium-2 columns\">\n        <artist-list :artists=\"artists\"></artist-list>\n      </div>\n\n      <div class=\"medium-10 columns\">\n        <artist :artist=\"artist\" v-if=\"state == 'artist'\"></artist>\n        <album :album=\"album\" v-if=\"state == 'album'\"></album>\n      </div>\n    </div>\n\n    <nav id=\"now-playing-bar\" class=\"navbar navbar-fixed-bottom navbar-light bg-faded\">\n      <audio id=\"player\"></audio>\n\n      <div class=\"now-playing-wrapper\">\n        <div class=\"now-playing-controls-container\">\n          <a id=\"play\" href=\"#\"><span class=\"fa fa-fw fa-play\"></span></a>\n          <a id=\"pause\" style=\"display: none\" href=\"#\"><span class=\"fa fa-fw fa-pause\"></span></a>\n          <a id=\"stop\" href=\"#\"><span class=\"fa fa-fw fa-stop\"></span></a>\n        </div>\n\n        <div class=\"now-playing-bar-container\">\n          <progress style=\"width: 100%\" id=\"now-playing-progress\" value=\"0\" max=\"100\"></progress>\n        </div>\n      </div>\n\n    </nav>\n  </div>";
 
 /***/ }
 /******/ ]);
