@@ -18,6 +18,7 @@ export default {
       // Server Authentication data
       authentication: {
         server: localStorage.server || '',
+        resolvedServer: undefined,
         username: localStorage.username || '',
         password: localStorage.password || ''
       },
@@ -66,7 +67,7 @@ export default {
         self.authentication.password + salt
       );
 
-      ajaxWorker.port.postMessage({
+      var loginData = {
         url: self.authentication.server + '/rest/ping.view',
         data: {
           f: 'json',
@@ -76,7 +77,19 @@ export default {
           s: salt,
           c: 'subsonicjs'
         }
-      });
+      };
+
+      var params = Object.keys(loginData.data).map(function(k) {
+        return encodeURIComponent(k) + '=' + encodeURIComponent(loginData.data[k]);
+      }).join('&');
+      var req = new XMLHttpRequest();
+      req.open('HEAD', loginData.url + params, true);
+      req.onload = function() {
+        self.authentication.resolvedServer = this.responseURL.match(/(.*)\/rest.*/)[1]
+      }
+      req.send();
+
+      ajaxWorker.port.postMessage(loginData);
       ajaxWorker.port.onmessage = function(e) {
         var data = e.data['subsonic-response'];
 
@@ -103,7 +116,7 @@ export default {
       );
 
       ajaxWorker.port.postMessage({
-        url: self.authentication.server + '/rest/getArtists.view',
+        url: self.authentication.resolvedServer + '/rest/getArtists.view',
         data: {
           f: 'json',
           v: '1.13.0',
@@ -127,7 +140,7 @@ export default {
       );
 
       ajaxWorker.port.postMessage({
-        url: self.authentication.server + '/rest/getArtist.view',
+        url: self.authentication.resolvedServer + '/rest/getArtist.view',
         data: {
           f: 'json',
           v: '1.13.0',
@@ -152,7 +165,7 @@ export default {
       );
 
       ajaxWorker.port.postMessage({
-        url: self.authentication.server + '/rest/getAlbum.view',
+        url: self.authentication.resolvedServer + '/rest/getAlbum.view',
         data: {
           f: 'json',
           v: '1.13.0',
@@ -176,7 +189,7 @@ export default {
         self.authentication.password + salt
       );
 
-      var url = self.authentication.server + '/rest/getCoverArt.view?';
+      var url = self.authentication.resolvedServer + '/rest/getCoverArt.view?';
 
       url += 'f=json&v=1.13.0&c=subsonicjs';
       url += '&u=' + self.authentication.username;
@@ -196,7 +209,7 @@ export default {
         self.authentication.password + salt
       );
 
-      var url = self.authentication.server + '/rest/stream.view?';
+      var url = self.authentication.resolvedServer + '/rest/stream.view?';
 
       url += 'f=json&v=1.13.0&c=subsonicjs';
       url += '&u=' + self.authentication.username;
