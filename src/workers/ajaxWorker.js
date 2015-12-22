@@ -2,15 +2,11 @@ function getJSON(url, data) {
   return new Promise(function(resolve, reject) {
     var req = new XMLHttpRequest();
 
-    var query = [];
-    for (var key in data) {
-      if (!data.hasOwnProperty(key)) {
-        continue;
-      }
+    var query = Object.keys(data).map(function (key) {
+      return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
+    }).join('&');
 
-      query.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));
-    }
-    url = url + '?' + query.join('&');
+    url = url + '?' + query;
 
     req.open('GET', url);
 
@@ -41,7 +37,7 @@ onconnect = function (e) {
       data = JSON.parse(data);
       port.postMessage(data);
     });
-  }
+  };
 
   port.start();
-}
+};
